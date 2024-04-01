@@ -2,6 +2,11 @@ import styled from '@emotion/styled';
 import { Assistant } from '../../../api/assistant/types';
 import { color } from '../../../styles/color';
 import { Button, Icon, Intent } from '@blueprintjs/core';
+import { useRecoilState } from 'recoil';
+import { assistantCreationState, assistantEditingState } from '../../assistant.store';
+import EditAssistantItem from './EditAssistantItem';
+import { useState } from 'react';
+import DeleteConfirmationPopup from '../../../shared/components/DeleteConfirmationPopup';
 
 interface Props {
   assistant: Assistant;
@@ -9,55 +14,89 @@ interface Props {
 }
 
 const AssistantItem: React.FC<Props> = ({ assistant, onClick }) => {
+  const [isCreation, setIsCreation] = useRecoilState(assistantCreationState);
+  const [editableAssistant, setEditableAssistant] = useRecoilState(assistantEditingState);
+
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  const isCurrentAssistantEditable: boolean = assistant.id === editableAssistant?.id;
+
   const handleEditClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
+    setIsCreation(false);
+    setEditableAssistant(assistant);
     console.log('edit');
   };
 
-  const handleDeleteClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  const handleLocalDeleteClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
-    console.log('delete');
+    setIsDeleteOpen(true);
+    console.log('pre-delete');
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteOpen(false);
+    console.log('deleted');
   };
 
   return (
-    <StyledAssistantItem onClick={() => onClick(assistant)}>
-      <FirstRow>
-        <NameWrapper>
-          <AssistantName>{assistant.name}</AssistantName>
-        </NameWrapper>
-        <CenteredInfo>
+    <div style={{ width: '100%' }}>
+      {!isCurrentAssistantEditable && (
+        <StyledAssistantItem onClick={() => onClick(assistant)} edit={false}>
+          <FirstRow>
+            <NameWrapper>
+              <AssistantName>{assistant.name}</AssistantName>
+            </NameWrapper>
+            <CenteredInfo>
+              <InfoItem>
+                <Label>LLM:</Label>
+                <LLMValue>{assistant.llmsource}</LLMValue>
+              </InfoItem>
+              <InfoItem>
+                <Label>Model:</Label> <ModelValue>{assistant.model}</ModelValue>
+              </InfoItem>
+            </CenteredInfo>
+            <CreatedAt>{assistant.created_at}</CreatedAt>
+            <ButtonsWrapper>
+              <Button
+                onClick={handleEditClick}
+                intent={Intent.WARNING}
+                style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}
+                minimal
+                small
+              >
+                <Icon icon={'edit'} />
+              </Button>
+              <Button
+                onClick={handleLocalDeleteClick}
+                intent={Intent.DANGER}
+                style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}
+                minimal
+                small
+              >
+                <Icon icon={'trash'} />
+              </Button>
+            </ButtonsWrapper>
+          </FirstRow>
           <InfoItem>
-            <Label>LLM:</Label> <Value>{assistant.llmsource}</Value>
+            <Label>Instructions:</Label>
           </InfoItem>
-          <InfoItem>
-            <Label>Model:</Label> <Value>{assistant.model}</Value>
-          </InfoItem>
-        </CenteredInfo>
-        <CreatedAt>{assistant.created_at}</CreatedAt>
-        <ButtonsWrapper>
-          <Button
-            onClick={handleDeleteClick}
-            intent={Intent.DANGER}
-            style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}
-            minimal
-            small
-          >
-            <Icon icon={'trash'} />
-          </Button>
-          <Button
-            onClick={handleEditClick}
-            intent={Intent.WARNING}
-            style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}
-            minimal
-            small
-          >
-            <Icon icon={'edit'} />
-          </Button>
-        </ButtonsWrapper>
-      </FirstRow>
 
-      <Instructions>{assistant.instructions}</Instructions>
-    </StyledAssistantItem>
+          <Instructions>{assistant.instructions}</Instructions>
+        </StyledAssistantItem>
+      )}
+      {isCurrentAssistantEditable && (
+        <StyledAssistantItem edit={true}>
+          <EditAssistantItem assistant={assistant} />
+        </StyledAssistantItem>
+      )}
+      <DeleteConfirmationPopup
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={() => handleDeleteClick()}
+        message={`Are you sure you want to delete Assistant "${assistant.name}"`}
+      />
+    </div>
   );
 };
 
@@ -74,6 +113,7 @@ const StyledAssistantItem = styled.div`
   margin: 20px auto;
   cursor: pointer;
   transition: all 0.3s ease;
+  transform: ${(props: { edit: boolean }) => (props.edit ? 'translateY(-4px)' : 'translateY(0px)')};
 
   &:hover {
     box-shadow: 0px 4px 25px ${color.Ubrightblue};
@@ -97,6 +137,10 @@ const NameWrapper = styled.div`
 const AssistantName = styled.div`
   font-weight: bold;
   font-size: 24px;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const CenteredInfo = styled.div`
@@ -117,8 +161,15 @@ const Label = styled.span`
   margin-right: 5px;
 `;
 
-const Value = styled.span`
-  max-width: 200px;
+const LLMValue = styled.div`
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const ModelValue = styled.div`
+  width: 210px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -136,9 +187,12 @@ const ButtonsWrapper = styled.div`
 `;
 
 const Instructions = styled.div`
+  max-height: 35px;
+  height: 35px;
   font-size: 14px;
   margin-top: 5px;
   white-space: pre-wrap;
+  overflow-y: auto;
 `;
 
 export default AssistantItem;

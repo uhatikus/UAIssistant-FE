@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { assistantActions } from '../../../api/assistant/module';
 
 const AssistantsPage = () => {
-  const assistants = [
+  const assistants: Assistant[] = [
     {
       id: '1',
       name: 'Assistant 1',
@@ -47,7 +47,8 @@ const AssistantsPage = () => {
       id: '5',
       name: 'test Assistant 5',
       created_at: '2024-03-31 15:35:15',
-      instructions: 'Be a good writer',
+      instructions:
+        'Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. ',
       model: 'gpt-3.5',
       llmsource: LLMSource.OpenAI,
     },

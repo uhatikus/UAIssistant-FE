@@ -7,6 +7,7 @@ import ThreadItem from './ThreadItem';
 import { assistantActions, selectThreads } from '../../../api/assistant/module';
 import { AssistantThread } from '../../../api/assistant/types';
 import { color } from '../../../styles/color';
+import { AppDispatch } from '../../../api';
 
 const ThreadsPanel: React.FC = () => {
   //   const assistantThreads: AssistantThread[] = useSelector(selectThreads);
@@ -31,7 +32,7 @@ const ThreadsPanel: React.FC = () => {
     },
     {
       id: '124',
-      name: 'new chat 4',
+      name: 'new chat chat chat chat chat chat chat chat 4',
       assistant_id: '1',
       created_at: '2024-03-31 19:30:15',
     },
@@ -61,7 +62,7 @@ const ThreadsPanel: React.FC = () => {
   //     updateThreadName,
   //   } = useUpdateThreadNameModal();
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const onNewChatClick = () => {
     dispatch(assistantActions.selectThreadId({ thread_id: null }));
@@ -100,14 +101,7 @@ const ThreadsPanel: React.FC = () => {
         />
         <ThreadsContainer>
           {assistantThreads.map((thread) => {
-            return (
-              <ThreadItem
-                key={thread.id}
-                assistantThread={thread}
-                onDeleteClick={() => console.log('delete')} //{openThreadDeleteModal}
-                onEditClick={() => console.log('edit')} //{openThreadNameUpdateModal}
-              />
-            );
+            return <ThreadItem key={thread.id} assistantThread={thread} />;
           })}
         </ThreadsContainer>
       </ThreadsPanelContainer>

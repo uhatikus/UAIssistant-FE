@@ -1,24 +1,51 @@
 import styled from '@emotion/styled';
-import { Button, Icon, Intent, Menu, MenuItem, Popover } from '@blueprintjs/core';
+import { Button, Icon, InputGroup, Intent, Menu, MenuItem, Popover } from '@blueprintjs/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { AssistantThread } from '../../../api/assistant/types';
 import { assistantActions, selectSelectedThreadId } from '../../../api/assistant/module';
 import { AppDispatch } from '../../../api';
 import { color } from '../../../styles/color';
+import { useState } from 'react';
+import DeleteConfirmationPopup from '../../../shared/components/DeleteConfirmationPopup';
 
 // TODO: (ASSISTANT) make something better than text-overflow: ellipsis;
 
 interface Props {
   assistantThread: AssistantThread;
-  onDeleteClick: (deleteThread: AssistantThread) => void;
-  onEditClick: (updateThreadName: AssistantThread) => void;
 }
 
-const ThreadItem = ({ assistantThread, onDeleteClick, onEditClick }: Props) => {
+const ThreadItem = ({ assistantThread }: Props) => {
   const selectedAssistantId: string | null = useSelector(selectSelectedThreadId);
   const selectedThreadId: string | null = useSelector(selectSelectedThreadId);
+  const [name, setName] = useState(assistantThread.name);
+  const [isEditableName, setIsEditableName] = useState(false);
+
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
+
+  const handleEditClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.stopPropagation();
+    setIsEditableName(true);
+    console.log('edit');
+  };
+
+  const handleSaveClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.stopPropagation();
+    setIsEditableName(false);
+    console.log('save');
+  };
+
+  const handleLocalDeleteClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.stopPropagation();
+    setIsDeleteOpen(true);
+    console.log('pre-delete');
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteOpen(false);
+    console.log('deleted');
+  };
 
   const onThreadClick = () => {
     dispatch(assistantActions.resetMessagesState());
@@ -33,30 +60,56 @@ const ThreadItem = ({ assistantThread, onDeleteClick, onEditClick }: Props) => {
 
   return (
     <ThreadItemContainer selected={selectedThreadId === assistantThread.id}>
-      <ThreadNameContainer onClick={() => onThreadClick()}>{assistantThread.name}</ThreadNameContainer>
-      <Popover
-        usePortal
-        placement="bottom-start"
+      {!isEditableName && (
+        <ThreadNameContainer onClick={() => onThreadClick()}>{assistantThread.name}</ThreadNameContainer>
+      )}
+      {isEditableName && (
+        <InputGroup
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter Thread Name"
+          style={{ width: '230px', padding: '8px 35px', marginLeft: '30px', fontSize: '18px' }}
+        />
+      )}
+      {!isEditableName && (
+        <Button
+          onClick={handleEditClick}
+          intent={Intent.WARNING}
+          style={{ marginLeft: '0px', cursor: 'pointer', borderRadius: '4px' }}
+          minimal
+          small
+        >
+          <Icon icon={'edit'} />
+        </Button>
+      )}
+
+      {isEditableName && (
+        <Button
+          onClick={handleSaveClick}
+          intent={Intent.SUCCESS}
+          style={{ marginLeft: '0px', cursor: 'pointer', borderRadius: '4px' }}
+          minimal
+          small
+          disabled={name === ''}
+        >
+          <Icon icon={'tick'} />
+        </Button>
+      )}
+      <Button
+        onClick={handleLocalDeleteClick}
+        intent={Intent.DANGER}
+        style={{ marginRight: '10px', cursor: 'pointer', borderRadius: '4px' }}
         minimal
-        content={
-          <Menu style={{ minWidth: '35px', maxWidth: '35px', width: '35px' }}>
-            <MenuItem
-              icon={<Icon icon="edit" size={13} />}
-              intent={Intent.WARNING}
-              onClick={() => onEditClick(assistantThread)}
-              text={undefined}
-            />
-            <MenuItem
-              icon={<Icon icon="trash" size={13} />}
-              intent={Intent.DANGER}
-              onClick={() => onDeleteClick(assistantThread)}
-              text={undefined}
-            />
-          </Menu>
-        }
+        small
       >
-        <Button icon={<Icon icon="more" size={13} />} minimal small />
-      </Popover>
+        <Icon icon={'trash'} />
+      </Button>
+      <DeleteConfirmationPopup
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={() => handleDeleteClick()}
+        message={`Are you sure you want to delete chat "${assistantThread.name}"`}
+      />
     </ThreadItemContainer>
   );
 };
@@ -87,9 +140,10 @@ const ThreadNameContainer = styled.div`
   height: 40px;
   min-height: 40px;
   max-height: 40px;
-  padding: 8px;
+  padding: 8px 35px;
 
   font-size: 18px;
+  font-weight: 450;
 
   overflow: hidden;
   text-overflow: ellipsis;

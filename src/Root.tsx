@@ -20,7 +20,7 @@ const Root = () => {
           className="logo-container"
           style={{ width: '47px', height: '58px', overflow: 'hidden', cursor: 'pointer' }}
         >
-          <img src="/logo.png" alt="s" style={{ height: '100%', width: 'auto' }} />
+          <img src="/logo.png" alt="" style={{ height: '100%', width: 'auto' }} />
         </div>
         <div onClick={handleClick} style={{ cursor: 'pointer' }}>
           AIssistant

@@ -1,12 +1,43 @@
 import styled from '@emotion/styled';
 import { color } from '../../../styles/color';
 import { Icon } from '@blueprintjs/core';
+import { Assistant, LLMSource } from '../../../api/assistant/types';
+import EditAssistantItem from './EditAssistantItem';
+import { useRecoilState } from 'recoil';
+import { assistantCreationState, assistantEditingState } from '../../assistant.store';
 
 const AddAssistantButton = () => {
+  const assistant: Assistant = {
+    id: '1',
+    name: 'Assistant 1',
+    created_at: '2024-03-31 14:30:15',
+    instructions: 'Be a very good creative writer.',
+    //   'Be a very good creative writer. Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.',
+    model: 'gpt-4',
+    llmsource: LLMSource.OpenAI,
+  };
+
+  const [isCreation, setIsCreation] = useRecoilState(assistantCreationState);
+  const [editableAssistant, setEditableAssistant] = useRecoilState(assistantEditingState);
+
+  const toggleDiv = () => {
+    setEditableAssistant(null);
+    setIsCreation(!isCreation); // Toggles the state between true and false
+  };
+
   return (
-    <StyledAddAssistantButton>
-      <Icon icon={'plus'} />
-    </StyledAddAssistantButton>
+    <div style={{ width: '100%' }}>
+      {!isCreation && (
+        <StyledAddAssistantButton onClick={toggleDiv} addbutton={true}>
+          <Icon icon={'plus'} style={{ height: '110.7px', alignItems: 'center', display: 'flex' }} />
+        </StyledAddAssistantButton>
+      )}
+      {isCreation && (
+        <StyledAddAssistantButton addbutton={false}>
+          <EditAssistantItem />
+        </StyledAddAssistantButton>
+      )}
+    </div>
   );
 };
 
@@ -17,7 +48,7 @@ const StyledAddAssistantButton = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 1000px;
-  height: 70px;
+  height: auto;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 2px 10px ${color.Ubrightblue};
@@ -25,6 +56,7 @@ const StyledAddAssistantButton = styled.div`
   margin: 80px auto 20px auto;
   cursor: pointer;
   transition: all 0.3s ease;
+  transform: ${(props: { addbutton: boolean }) => (props.addbutton ? 'translateY(0px)' : 'translateY(-4px)')};
 
   &:hover {
     box-shadow: 0px 4px 25px ${color.Ubrightblue};
