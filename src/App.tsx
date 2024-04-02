@@ -9,9 +9,7 @@ import store from './api';
 import { BrowserRouter } from 'react-router-dom';
 
 function App() {
-  useEffect(() => {
-    initApiClients();
-  }, []);
+  initApiClients();
 
   return (
     <RecoilRoot>

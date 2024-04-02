@@ -7,6 +7,7 @@ import { AppDispatch } from '../../../api';
 import { color } from '../../../styles/color';
 import { useState } from 'react';
 import DeleteConfirmationPopup from '../../../shared/components/DeleteConfirmationPopup';
+import { useParams } from 'react-router-dom';
 
 // TODO: (ASSISTANT) make something better than text-overflow: ellipsis;
 
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const ThreadItem = ({ assistantThread }: Props) => {
-  const selectedAssistantId: string | null = useSelector(selectSelectedThreadId);
+  const { assistantId } = useParams<{ assistantId: string }>();
   const selectedThreadId: string | null = useSelector(selectSelectedThreadId);
   const [name, setName] = useState(assistantThread.name);
   const [isEditableName, setIsEditableName] = useState(false);
@@ -27,24 +28,28 @@ const ThreadItem = ({ assistantThread }: Props) => {
   const handleEditClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsEditableName(true);
-    console.log('edit');
   };
 
   const handleSaveClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsEditableName(false);
-    console.log('save');
+    dispatch(
+      assistantActions.updateThread({
+        assistant_id: assistantThread.assistant_id,
+        thread_id: assistantThread.id,
+        name: name!,
+      })
+    );
   };
 
   const handleLocalDeleteClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsDeleteOpen(true);
-    console.log('pre-delete');
   };
 
   const handleDeleteClick = () => {
     setIsDeleteOpen(false);
-    console.log('deleted');
+    dispatch(assistantActions.deleteThread({ assistant_id: assistantId!, thread_id: assistantThread.id }));
   };
 
   const onThreadClick = () => {
@@ -52,7 +57,7 @@ const ThreadItem = ({ assistantThread }: Props) => {
     dispatch(
       assistantActions.getMessages({
         thread_id: assistantThread!.id,
-        assistant_id: selectedAssistantId!,
+        assistant_id: assistantId!,
       })
     );
     dispatch(assistantActions.selectThreadId({ thread_id: assistantThread.id }));

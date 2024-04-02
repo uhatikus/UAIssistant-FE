@@ -4,14 +4,9 @@ import styled from '@emotion/styled';
 import { Button, TextArea } from '@blueprintjs/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { atom, useRecoilState } from 'recoil';
-import {
-  assistantActions,
-  selectIsNOTReadyForMessage,
-  selectSelectedAssistantId,
-  selectSelectedThreadId,
-} from '../../../api/assistant/module';
+import { assistantActions, selectIsNOTReadyForMessage, selectSelectedThreadId } from '../../../api/assistant/module';
 import { AppDispatch } from '../../../api';
-import { color } from '../../../styles/color';
+import { useParams } from 'react-router-dom';
 
 export const promptState = atom<string>({
   key: 'prompt',
@@ -22,8 +17,9 @@ export const promptState = atom<string>({
 // TODO: (ASSISTANT) add autoresize for TextArea (available for a newer version of blueprintjs/core)
 
 const InputPanel: React.FC = () => {
+  const { assistantId } = useParams<{ assistantId: string }>();
+
   const selectedThreadId: string | null = useSelector(selectSelectedThreadId);
-  const selectedAssistantID: string | null = useSelector(selectSelectedAssistantId);
   const isNOTReadyForMessage: boolean = useSelector(selectIsNOTReadyForMessage);
 
   const [prompt, setPrompt] = useRecoilState(promptState);
@@ -33,12 +29,12 @@ const InputPanel: React.FC = () => {
   const handleSendMessage = async () => {
     dispatch(assistantActions.addUserMessage({ message: prompt }));
     if (_.isNull(selectedThreadId)) {
-      dispatch(assistantActions.initializeThread({ assistant_id: selectedAssistantID!, message: prompt }));
+      dispatch(assistantActions.initializeThread({ assistant_id: assistantId!, message: prompt }));
     } else {
       dispatch(
         assistantActions.sendMessage({
           thread_id: selectedThreadId!,
-          assistant_id: selectedAssistantID!,
+          assistant_id: assistantId!,
           message: prompt,
         })
       );

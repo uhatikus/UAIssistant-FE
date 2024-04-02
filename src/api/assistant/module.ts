@@ -77,7 +77,6 @@ interface AssistantState {
   assistants: EntityState<Assistant, string>;
   threads: EntityState<AssistantThread, string>;
   messages: EntityState<AssistantMessage, string>;
-  selectedAssistantId: string | null;
   selectedThreadId: string | null;
 
   assistantsGet: ApiState;
@@ -99,7 +98,6 @@ const initialState: AssistantState = {
   assistants: assistantsAdapter.getInitialState(),
   threads: threadsAdapter.getInitialState(),
   messages: messagesAdapter.getInitialState(),
-  selectedAssistantId: null,
   selectedThreadId: null,
 
   assistantsGet: initialApiState,
@@ -119,10 +117,10 @@ const initialState: AssistantState = {
  */
 
 // GET REQUESTS
-const getAssistants = createAsyncThunk(`${PREFIX}/getAssistants`, (unused, { rejectWithValue }) => {
+const getAssistants = createAsyncThunk(`${PREFIX}/getAssistants`, async (unused, { rejectWithValue }) => {
   const assistantApiClient = new AssistantApiClient().getInstance();
   return assistantApiClient
-    .get(``)
+    .get('')
     .then(({ data }: { data: AssistantsGetResponse }): AssistantsGetResponse => data)
     .catch((error) => rejectWithValue({ message: getErrorMessage(error) }));
 });
@@ -157,7 +155,7 @@ const createAssistant = createAsyncThunk(
     const assistantApiClient = new AssistantApiClient().getInstance();
 
     return assistantApiClient
-      .post(``, { name, instructions, llmsource, model })
+      .post('', { name, instructions, llmsource, model })
       .then(({ data }: { data: CreateAssistantResponse }): CreateAssistantResponse => data)
       .catch((error) => rejectWithValue({ message: getErrorMessage(error) }));
   }
@@ -221,7 +219,7 @@ const updateAssistant = createAsyncThunk(
     const assistantApiClient = new AssistantApiClient().getInstance();
 
     return assistantApiClient
-      .patch(`/${assistant_id}}`, { name, instructions, model })
+      .patch(`/${assistant_id}`, { name, instructions, model })
       .then(({ data }: { data: AssistantUpdateResponse }): AssistantUpdateResponse => data)
       .catch((error) => rejectWithValue({ message: getErrorMessage(error) }));
   }
@@ -253,14 +251,9 @@ export const assistantSlice = createSlice({
       state.assistants = initialState.assistants;
       state.threads = initialState.threads;
       state.messages = initialState.messages;
-      state.selectedAssistantId = initialState.selectedAssistantId;
       state.selectedThreadId = initialState.selectedThreadId;
     },
 
-    selectAssistantId: (state: AssistantState, action: PayloadAction<selectAssistantIdPayload>) => {
-      const { assistant_id } = action.payload;
-      state.selectedAssistantId = assistant_id;
-    },
     selectThreadId: (state: AssistantState, action: PayloadAction<selectThreadIdPayload>) => {
       const { thread_id } = action.payload;
       state.selectedThreadId = thread_id;
@@ -279,6 +272,9 @@ export const assistantSlice = createSlice({
         },
       };
       messagesAdapter.addOne(state.messages, userMessage);
+    },
+    resetThreadsState: (state: AssistantState) => {
+      state.threads = initialState.threads;
     },
     resetMessagesState: (state: AssistantState) => {
       state.messages = initialState.messages;
@@ -348,7 +344,6 @@ export const assistantSlice = createSlice({
       createAssistant.fulfilled.type,
       (state: AssistantState, action: PayloadAction<CreateAssistantResponse>) => {
         const { assistant } = action.payload;
-        state.selectedAssistantId = assistant.id;
         assistantsAdapter.addOne(state.assistants, assistant);
         handleAsyncThunkFulfilledStatus(state.createAssistant);
       }
@@ -400,11 +395,6 @@ export const assistantSlice = createSlice({
       (state: AssistantState, action: PayloadAction<AssistantDeleteResponse>) => {
         const { assistant } = action.payload;
         assistantsAdapter.removeOne(state.assistants, assistant.id);
-        if (state.selectedAssistantId === assistant.id) {
-          state.selectedAssistantId = initialState.selectedAssistantId;
-          threadsAdapter.removeAll(state.threads);
-          messagesAdapter.removeAll(state.messages);
-        }
         handleAsyncThunkFulfilledStatus(state.assistantDelete);
       }
     );
@@ -511,11 +501,6 @@ export const selectThreads: Selector<RootState, AssistantThread[]> = createSelec
 export const selectMessages: Selector<RootState, AssistantMessage[]> = createSelector(
   assistantInputSelector,
   messagesSelectors.selectAll
-);
-
-export const selectSelectedAssistantId: Selector<RootState, string | null> = createSelector(
-  assistantInputSelector,
-  ({ selectedAssistantId }) => selectedAssistantId
 );
 
 export const selectSelectedThreadId: Selector<RootState, string | null> = createSelector(

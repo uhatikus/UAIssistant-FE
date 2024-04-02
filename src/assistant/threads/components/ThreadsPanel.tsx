@@ -10,57 +10,39 @@ import { color } from '../../../styles/color';
 import { AppDispatch } from '../../../api';
 
 const ThreadsPanel: React.FC = () => {
-  //   const assistantThreads: AssistantThread[] = useSelector(selectThreads);
-  const assistantThreads: AssistantThread[] = [
-    {
-      id: '121',
-      name: 'new chat 1',
-      assistant_id: '1',
-      created_at: '2024-03-31 14:30:15',
-    },
-    {
-      id: '122',
-      name: 'new chat 2',
-      assistant_id: '1',
-      created_at: '2024-03-31 17:30:15',
-    },
-    {
-      id: '123',
-      name: 'new chat 3',
-      assistant_id: '1',
-      created_at: '2024-03-31 18:30:15',
-    },
-    {
-      id: '124',
-      name: 'new chat chat chat chat chat chat chat chat 4',
-      assistant_id: '1',
-      created_at: '2024-03-31 19:30:15',
-    },
-    {
-      id: '125',
-      name: 'new chat 5',
-      assistant_id: '1',
-      created_at: '2024-03-31 20:30:15',
-    },
-  ];
-
-  //   const {
-  //     deleteTargetThread,
-  //     isThreadDeleteModalVisible,
-  //     isDeleteThreadLoading,
-  //     openThreadDeleteModal,
-  //     closeThreadDeleteModal,
-  //     deleteThread,
-  //   } = useDeleteThreadModal();
-
-  //   const {
-  //     updateTargetThreadName,
-  //     isThreadNameUpdateModalVisible,
-  //     isUpdateThreadNameLoading,
-  //     openThreadNameUpdateModal,
-  //     closeThreadNameUpdateModal,
-  //     updateThreadName,
-  //   } = useUpdateThreadNameModal();
+  const assistantThreads: AssistantThread[] = useSelector(selectThreads);
+  // const assistantThreads: AssistantThread[] = [
+  //   {
+  //     id: '121',
+  //     name: 'new chat 1',
+  //     assistant_id: '1',
+  //     created_at: '2024-03-31 14:30:15',
+  //   },
+  //   {
+  //     id: '122',
+  //     name: 'new chat 2',
+  //     assistant_id: '1',
+  //     created_at: '2024-03-31 17:30:15',
+  //   },
+  //   {
+  //     id: '123',
+  //     name: 'new chat 3',
+  //     assistant_id: '1',
+  //     created_at: '2024-03-31 18:30:15',
+  //   },
+  //   {
+  //     id: '124',
+  //     name: 'new chat chat chat chat chat chat chat chat 4',
+  //     assistant_id: '1',
+  //     created_at: '2024-03-31 19:30:15',
+  //   },
+  //   {
+  //     id: '125',
+  //     name: 'new chat 5',
+  //     assistant_id: '1',
+  //     created_at: '2024-03-31 20:30:15',
+  //   },
+  // ];
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -71,26 +53,6 @@ const ThreadsPanel: React.FC = () => {
 
   return (
     <>
-      {/* {!_.isNull(deleteTargetThread) && (
-        <DeleteModal
-          isOpen={isThreadDeleteModalVisible}
-          scope="Chat"
-          name={deleteTargetThread!.name}
-          isDeleteLoading={isDeleteThreadLoading}
-          onDelete={deleteThread}
-          onCloseSelf={closeThreadDeleteModal}
-        />
-      )}
-      {!_.isNull(updateTargetThreadName) && (
-        <RenameModal
-          isOpen={isThreadNameUpdateModalVisible}
-          scope="Chat"
-          name={updateTargetThreadName.name}
-          isRenameLoading={isUpdateThreadNameLoading}
-          onRename={updateThreadName}
-          onCloseSelf={closeThreadNameUpdateModal}
-        />
-      )} */}
       <ThreadsPanelContainer>
         <Button
           icon={<Icon icon="new-drawing" size={16} />}

@@ -1,72 +1,20 @@
 import styled from '@emotion/styled';
-import { Assistant, LLMSource } from '../../../api/assistant/types';
+import { Assistant } from '../../../api/assistant/types';
 import AssistantItem from './AssistantItem';
 import { color } from '../../../styles/color';
 import { useNavigate } from 'react-router-dom';
 import AddAssistantButton from './AddAssistantButton';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { assistantActions } from '../../../api/assistant/module';
+import { useDispatch, useSelector } from 'react-redux';
+import { assistantActions, selectAssistants } from '../../../api/assistant/module';
+import { AppDispatch } from '../../../api';
 
 const AssistantsPage = () => {
-  const assistants: Assistant[] = [
-    {
-      id: '1',
-      name: 'Assistant 1',
-      created_at: '2024-03-31 14:30:15',
-      instructions: 'Be a creative writer',
-      model: 'gpt-4',
-      llmsource: LLMSource.OpenAI,
-    },
-    {
-      id: '2',
-      name: 'test Assistant very good 2',
-      created_at: '2024-03-31 14:35:15',
-      instructions: 'Be a bad writer',
-      model: 'claude-3-opus-20240229',
-      llmsource: LLMSource.Anthropic,
-    },
-    {
-      id: '3',
-      name: 'test Assistant 3',
-      created_at: '2024-03-31 14:45:15',
-      instructions:
-        'Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. Be a bad writer. ',
-      model: 'claude-2',
-      llmsource: LLMSource.Anthropic,
-    },
-    {
-      id: '4',
-      name: 'test Assistant 4',
-      created_at: '2024-03-31 14:55:15',
-      instructions: 'Be a bad writer',
-      model: 'gpt-3.5',
-      llmsource: LLMSource.OpenAI,
-    },
-    {
-      id: '5',
-      name: 'test Assistant 5',
-      created_at: '2024-03-31 15:35:15',
-      instructions:
-        'Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. Be a good writer. ',
-      model: 'gpt-3.5',
-      llmsource: LLMSource.OpenAI,
-    },
-    {
-      id: '6',
-      name: 'test Assistant 6',
-      created_at: '2024-03-31 16:35:15',
-      instructions: 'Be a great writer',
-      model: 'gpt-4',
-      llmsource: LLMSource.OpenAI,
-    },
-  ];
+  const assistants: Assistant[] = useSelector(selectAssistants);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleAssistantItemClick = useCallback(({ id }: Assistant) => {
-    dispatch(assistantActions.selectAssistantId({ assistant_id: id }));
     navigate(`/assistants/${id}/threads`);
   }, []);
 

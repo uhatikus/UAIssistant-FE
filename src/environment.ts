@@ -1,3 +1,3 @@
 export const endPoint = {
-  AssistantApi: 'http://127.0.0.1:8000/api/assistants',
+  AssistantApi: 'http://0.0.0.0:8000/api/assistants',
 };

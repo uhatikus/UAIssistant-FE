@@ -7,6 +7,9 @@ import { assistantCreationState, assistantEditingState } from '../../assistant.s
 import EditAssistantItem from './EditAssistantItem';
 import { useState } from 'react';
 import DeleteConfirmationPopup from '../../../shared/components/DeleteConfirmationPopup';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../api';
+import { assistantActions } from '../../../api/assistant/module';
 
 interface Props {
   assistant: Assistant;
@@ -21,22 +24,22 @@ const AssistantItem: React.FC<Props> = ({ assistant, onClick }) => {
 
   const isCurrentAssistantEditable: boolean = assistant.id === editableAssistant?.id;
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const handleEditClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsCreation(false);
     setEditableAssistant(assistant);
-    console.log('edit');
   };
 
   const handleLocalDeleteClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsDeleteOpen(true);
-    console.log('pre-delete');
   };
 
   const handleDeleteClick = () => {
     setIsDeleteOpen(false);
-    console.log('deleted');
+    dispatch(assistantActions.deleteAssistant({ assistant_id: assistant.id }));
   };
 
   return (

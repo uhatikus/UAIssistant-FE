@@ -7,16 +7,6 @@ import { useRecoilState } from 'recoil';
 import { assistantCreationState, assistantEditingState } from '../../assistant.store';
 
 const AddAssistantButton = () => {
-  const assistant: Assistant = {
-    id: '1',
-    name: 'Assistant 1',
-    created_at: '2024-03-31 14:30:15',
-    instructions: 'Be a very good creative writer.',
-    //   'Be a very good creative writer. Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.Be a very good creative writer.',
-    model: 'gpt-4',
-    llmsource: LLMSource.OpenAI,
-  };
-
   const [isCreation, setIsCreation] = useRecoilState(assistantCreationState);
   const [editableAssistant, setEditableAssistant] = useRecoilState(assistantEditingState);
 

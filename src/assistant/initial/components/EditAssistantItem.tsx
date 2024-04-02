@@ -34,7 +34,7 @@ const EditAssistantItem: React.FC<Props> = ({ assistant }) => {
       dispatch(
         assistantActions.createAssistant({
           name: name!,
-          instructions: instructions!,
+          instructions: _.isUndefined(instructions) ? '' : instructions!,
           llmsource: selectedLLM,
           model: selectedModel,
         })
@@ -46,14 +46,13 @@ const EditAssistantItem: React.FC<Props> = ({ assistant }) => {
         assistantActions.updateAssistant({
           assistant_id: assistant!.id,
           name: name!,
-          instructions: instructions!,
+          instructions: _.isUndefined(instructions) ? '' : instructions!,
           model: selectedModel,
         })
       );
     }
     setIsCreation(false);
     setEditableAssistant(null);
-    // Add your save logic here
   };
 
   return (
