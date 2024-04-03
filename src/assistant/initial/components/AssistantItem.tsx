@@ -81,7 +81,7 @@ const AssistantItem: React.FC<Props> = ({ assistant, onClick }) => {
               </Button>
             </ButtonsWrapper>
           </FirstRow>
-          <InfoItem>
+          <InfoItem style={{ marginTop: '5px' }}>
             <Label>Instructions:</Label>
           </InfoItem>
 

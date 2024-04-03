@@ -173,7 +173,7 @@ const EditAssistantItem: React.FC<Props> = ({ assistant }) => {
           ></Button>
         </ButtonsWrapper>
       </FirstRow>
-      <InfoItem>
+      <InfoItem style={{ marginTop: '5px' }}>
         <Label>Instructions:</Label>
       </InfoItem>
       <TextArea
@@ -216,7 +216,7 @@ const EditAssistantItem: React.FC<Props> = ({ assistant }) => {
 
 const StyledEditableAssistantItem = styled.div`
   width: 100%;
-  height: 110.7px;
+  height: 115.7px;
 `;
 
 const FirstRow = styled.div`
