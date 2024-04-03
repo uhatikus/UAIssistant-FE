@@ -79,7 +79,7 @@ const ThreadItem = ({ assistantThread }: Props) => {
       {!isEditableName && (
         <Button
           onClick={handleEditClick}
-          intent={Intent.WARNING}
+          intent={Intent.NONE}
           style={{ marginLeft: '0px', cursor: 'pointer', borderRadius: '4px' }}
           minimal
           small

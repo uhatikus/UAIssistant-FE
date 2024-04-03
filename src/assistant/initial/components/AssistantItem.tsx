@@ -63,7 +63,7 @@ const AssistantItem: React.FC<Props> = ({ assistant, onClick }) => {
             <ButtonsWrapper>
               <Button
                 onClick={handleEditClick}
-                intent={Intent.WARNING}
+                intent={Intent.NONE}
                 style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}
                 minimal
                 small

@@ -64,7 +64,13 @@ const EditAssistantItem: React.FC<Props> = ({ assistant }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter Assistant Name"
-              style={{ width: '300px', boxShadow: `0px -2px 10px -2px ${color.Ubrightblue} inset` }}
+              style={{
+                height: '50px',
+                fontSize: '24px',
+                width: '300px',
+                // border: `2px solid ${color.Ublue}`,
+                boxShadow: `0px -2px 10px -2px ${color.Ubrightblue} inset`,
+              }}
             />
           </AssistantName>
         </NameWrapper>
