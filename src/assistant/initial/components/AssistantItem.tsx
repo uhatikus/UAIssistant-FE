@@ -59,7 +59,11 @@ const AssistantItem: React.FC<Props> = ({ assistant, onClick }) => {
                 <Label>Model:</Label> <ModelValue>{assistant.model}</ModelValue>
               </InfoItem>
             </CenteredInfo>
-            <CreatedAt>{assistant.created_at}</CreatedAt>
+            <CreatedAt>
+              {new Date(assistant.created_at).toLocaleDateString() +
+                ' ' +
+                new Date(assistant.created_at).toLocaleTimeString()}
+            </CreatedAt>
             <ButtonsWrapper>
               <Button
                 onClick={handleEditClick}
