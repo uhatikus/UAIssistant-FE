@@ -1,9 +1,10 @@
 export const enum LLMSource {
   OpenAI = 'openai',
   Anthropic = 'anthropic',
+  Gemini = 'gemini',
 }
 
-export const LLMList = [LLMSource.OpenAI, LLMSource.Anthropic];
+export const LLMList = [LLMSource.OpenAI, LLMSource.Anthropic, LLMSource.Gemini];
 
 export const LLMModelsDictionary = {
   [LLMSource.OpenAI]: [
@@ -31,6 +32,7 @@ export const LLMModelsDictionary = {
     'claude-2.0',
     'claude-instant-1.2',
   ],
+  [LLMSource.Gemini]: ['gemini-1.5-pro-latest', 'gemini-pro', 'gemini-pro-vision'],
 };
 
 export const enum AssistantRole {

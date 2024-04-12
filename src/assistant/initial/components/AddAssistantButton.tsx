@@ -19,7 +19,7 @@ const AddAssistantButton = () => {
     <div style={{ width: '100%' }}>
       {!isCreation && (
         <StyledAddAssistantButton onClick={toggleDiv} addbutton={true}>
-          <Icon icon={'plus'} style={{ height: '110.7px', alignItems: 'center', display: 'flex' }} />
+          <div style={{ height: '115.7px', alignItems: 'center', display: 'flex', fontSize: '32px' }}>+</div>
         </StyledAddAssistantButton>
       )}
       {isCreation && (

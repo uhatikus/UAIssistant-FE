@@ -11,38 +11,6 @@ import { AppDispatch } from '../../../api';
 
 const ThreadsPanel: React.FC = () => {
   const assistantThreads: AssistantThread[] = useSelector(selectThreads);
-  // const assistantThreads: AssistantThread[] = [
-  //   {
-  //     id: '121',
-  //     name: 'new chat 1',
-  //     assistant_id: '1',
-  //     created_at: '2024-03-31 14:30:15',
-  //   },
-  //   {
-  //     id: '122',
-  //     name: 'new chat 2',
-  //     assistant_id: '1',
-  //     created_at: '2024-03-31 17:30:15',
-  //   },
-  //   {
-  //     id: '123',
-  //     name: 'new chat 3',
-  //     assistant_id: '1',
-  //     created_at: '2024-03-31 18:30:15',
-  //   },
-  //   {
-  //     id: '124',
-  //     name: 'new chat chat chat chat chat chat chat chat 4',
-  //     assistant_id: '1',
-  //     created_at: '2024-03-31 19:30:15',
-  //   },
-  //   {
-  //     id: '125',
-  //     name: 'new chat 5',
-  //     assistant_id: '1',
-  //     created_at: '2024-03-31 20:30:15',
-  //   },
-  // ];
 
   const dispatch = useDispatch<AppDispatch>();
 

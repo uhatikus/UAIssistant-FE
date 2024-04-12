@@ -77,6 +77,7 @@ interface AssistantState {
   assistants: EntityState<Assistant, string>;
   threads: EntityState<AssistantThread, string>;
   messages: EntityState<AssistantMessage, string>;
+  selectedAssistantId: string | null;
   selectedThreadId: string | null;
 
   assistantsGet: ApiState;
@@ -98,6 +99,7 @@ const initialState: AssistantState = {
   assistants: assistantsAdapter.getInitialState(),
   threads: threadsAdapter.getInitialState(),
   messages: messagesAdapter.getInitialState(),
+  selectedAssistantId: null,
   selectedThreadId: null,
 
   assistantsGet: initialApiState,
@@ -251,9 +253,13 @@ export const assistantSlice = createSlice({
       state.assistants = initialState.assistants;
       state.threads = initialState.threads;
       state.messages = initialState.messages;
+      state.selectedAssistantId = initialState.selectedAssistantId;
       state.selectedThreadId = initialState.selectedThreadId;
     },
-
+    selectAssistantId: (state: AssistantState, action: PayloadAction<selectAssistantIdPayload>) => {
+      const { assistant_id } = action.payload;
+      state.selectedAssistantId = assistant_id;
+    },
     selectThreadId: (state: AssistantState, action: PayloadAction<selectThreadIdPayload>) => {
       const { thread_id } = action.payload;
       state.selectedThreadId = thread_id;
@@ -493,6 +499,12 @@ export const selectAssistants: Selector<RootState, Assistant[]> = createSelector
   assistantsSelectors.selectAll
 );
 
+export const selectAssistant: Selector<RootState, Assistant | null> = createSelector(
+  assistantInputSelector,
+  ({ assistants, selectedAssistantId }) =>
+    selectedAssistantId ? assistantsAdapter.getSelectors().selectById(assistants, selectedAssistantId) : null
+);
+
 export const selectThreads: Selector<RootState, AssistantThread[]> = createSelector(
   assistantInputSelector,
   threadsSelectors.selectAll
@@ -617,3 +629,12 @@ export const selectIsNOTReadyForMessage = createSelector(
     isApiLoadingStatus(assistantUpdate) ||
     isApiLoadingStatus(threadUpdate)
 );
+function selectById(
+  assistants: any,
+  arg1: any
+): (
+  resultFuncArgs_0: AssistantState,
+  resultFuncArgs_1: import('@reduxjs/toolkit').EntitySelectors<Assistant, EntityState<Assistant, string>, string>
+) => Assistant {
+  throw new Error('Function not implemented.');
+}

@@ -12,9 +12,11 @@ import { AppDispatch } from '../../../api';
 const AssistantsPage = () => {
   const assistants: Assistant[] = useSelector(selectAssistants);
 
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const handleAssistantItemClick = useCallback(({ id }: Assistant) => {
+    dispatch(assistantActions.selectAssistantId({ assistant_id: id }));
     navigate(`/assistants/${id}/threads`);
   }, []);
 
@@ -59,3 +61,9 @@ const AssistantList = styled.div`
 `;
 
 export default AssistantsPage;
+function dispatch(arg0: {
+  payload: import('../../../api/assistant/types').selectAssistantIdPayload;
+  type: `${string}/selectAssistantId`;
+}) {
+  throw new Error('Function not implemented.');
+}
