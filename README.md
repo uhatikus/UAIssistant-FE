@@ -17,12 +17,21 @@ UAIssistant-FE is a Frontend for a [UAIssistant BE](https://github.com/uhatikus/
 
 ### Install nodejs
 
+1. Download nvm
+
 ```
-# download nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-# install nodejs v20
+```
+
+2. Install nodejs v20
+
+```
 nvm install 20
-# set nodejs v20
+```
+
+3. Set nodejs v20
+
+```
 nvm use 20
 ```
 
@@ -36,10 +45,10 @@ npm install -g yarn@latest
 
 Before you run UAIssistant FE, make sure you have started [UAIssistant BE](https://github.com/uhatikus/UAIssistant)
 
+Install dependencies and start the FE:
+
 ```
-# install dependencies
 yarn install
-# start the FE
 yarn start
 ```
 
