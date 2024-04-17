@@ -60,7 +60,7 @@ const InputPanel: React.FC = () => {
       <Button
         icon="send-message"
         minimal
-        style={{ position: 'absolute', bottom: '35px', right: '70px' }}
+        style={{ position: 'absolute', bottom: '25px', right: '70px' }}
         onClick={handleSendMessage}
         disabled={isNOTReadyForMessage}
       />

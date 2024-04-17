@@ -2,6 +2,8 @@
 
 UAIssistant-FE is a Frontend for a [UAIssistant BE](https://github.com/uhatikus/UAIssistant), an Assistant powered by OpenAI's ChatGPT, Anthropic Claude and Google's Gemini, that enhances **Data Security** and optimizes **Money** and **Time** costs.
 
+Check out this [YouTube video](https://www.youtube.com/watch?v=ktFbcTqtOYU) for a demo of the project.
+
 ## Contents
 
 - [Requirements](#requirements)
